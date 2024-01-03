@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gratitude_diary/component/calendar.dart';
+import 'package:gratitude_diary/component/thanks_card.dart';
 import 'package:gratitude_diary/component/today_banner.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -24,7 +25,13 @@ class _HistoryState extends State<History> {
           onDaySelected: onDaySelected,
         ),
         const SizedBox(height: 8),
-        TodayBanner(selectedDay: selectedDay, scheduleCount: 3)
+        TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
+        const SizedBox(height: 8),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: ThanksCard(
+              time: '10:23', index: 1, content: '토마토라멘 맛있어서 감사합니다.', tag: '음식'),
+        )
       ],
     ));
   }
