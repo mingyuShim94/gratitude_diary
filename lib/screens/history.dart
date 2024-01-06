@@ -26,12 +26,8 @@ class _HistoryState extends State<History> {
         ),
         const SizedBox(height: 8),
         TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
-        const SizedBox(height: 8),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: ThanksCard(
-              time: '10:23', index: 1, content: '토마토라멘 맛있어서 감사합니다.', tag: '음식'),
-        )
+        // const SizedBox(height: 8),
+        const _ThanksList(),
       ],
     ));
   }
@@ -41,5 +37,30 @@ class _HistoryState extends State<History> {
       this.selectedDay = selectedDay;
       this.focusedDay = selectedDay;
     });
+  }
+}
+
+class _ThanksList extends StatelessWidget {
+  const _ThanksList({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ListView.separated(
+            itemCount: 10,
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              return const ThanksCard(
+                  time: '10:23',
+                  index: 1,
+                  content: '토마토라멘 맛있어서 감사합니다.',
+                  tag: '음식');
+            }),
+      ),
+    );
   }
 }
