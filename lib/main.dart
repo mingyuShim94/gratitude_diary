@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gratitude_diary/screens/HomeScreen.dart';
 import 'package:gratitude_diary/screens/history.dart';
 import 'package:gratitude_diary/screens/home.dart';
 import 'package:gratitude_diary/screens/report.dart';
@@ -35,6 +36,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
+    // HomeScreen(),
     Home(),
     History(),
     Report(),

@@ -22,7 +22,7 @@ class AnimatedThanksSheet extends StatelessWidget {
           ),
           transform: Matrix4.translationValues(
             selected ? 0 : 0, // X 좌표 변경
-            selected ? 0 : 500, // Y 좌표 변경
+            selected ? 0 : 600, // Y 좌표 변경
             0, // Z 좌표 변경 (0으로 유지)
           ),
           duration: const Duration(seconds: 1),

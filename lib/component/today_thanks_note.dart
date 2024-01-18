@@ -36,7 +36,7 @@ class TodayThanksNote extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white,
                     border: InputBorder.none,
-                    hintText: 'hello',
+                    hintText: '감사한 대상을 입력해주세요.',
                   ),
                   style: TextStyle(
                     fontSize: 10,
