@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gratitude_diary/screens/HomeScreen.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gratitude_diary/database/drift_database.dart';
 import 'package:gratitude_diary/screens/history.dart';
 import 'package:gratitude_diary/screens/home.dart';
 import 'package:gratitude_diary/screens/report.dart';
@@ -9,6 +10,8 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
+
+  GetIt.I.registerSingleton<LocalDatabase>(LocalDatabase());
   runApp(const MyApp());
 }
 
