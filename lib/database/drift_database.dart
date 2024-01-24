@@ -19,7 +19,14 @@ class LocalDatabase extends _$LocalDatabase {
 
   Future<List<Diary>> getAllDiaryEntries() => select(diarys).get();
 
-  Stream<List<Diary>> watchAllDiaryEntries() => select(diarys).watch();
+  // Stream<List<Diary>> watchAllDiaryEntries() => select(diarys).watch();
+  Stream<List<Diary>> watchDiaryEntriesByDate(DateTime date) => (select(diarys)
+        ..where((tbl) =>
+            tbl.createdAt.year.equals(date.year) &
+            tbl.createdAt.month.equals(date.month) &
+            tbl.createdAt.day.equals(date.day)))
+      .watch();
+
   @override
   int get schemaVersion => 1;
 }
@@ -27,7 +34,7 @@ class LocalDatabase extends _$LocalDatabase {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final file = File(p.join(dbFolder.path, 'db1.sqlite'));
     return NativeDatabase(file);
   });
 }

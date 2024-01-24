@@ -17,133 +17,136 @@ class _DiarySectionState extends State<DiarySection> {
 
   String? content;
   String? tag;
-
+  DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.5 - 58,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      color: Colors.blue,
-      child: StreamBuilder<List<Diary>>(
-          stream: GetIt.I<LocalDatabase>().watchAllDiaryEntries(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            print('snapshot.data: ${snapshot.data}');
-            return ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              itemCount: 5,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          contentPadding: const EdgeInsets.all(0),
-                          content: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                            height: MediaQuery.of(context).size.height * 0.4,
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '${index + 1}번째 감사일기',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        color: Colors.blue,
+        child: StreamBuilder<List<Diary>>(
+            stream: GetIt.I<LocalDatabase>().watchDiaryEntriesByDate(date),
+            builder: (context, snapshot) {
+              print(snapshot.data);
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasData && snapshot.data!.isEmpty) {
+                return const Center(child: Text('데이터가 없습니다.'));
+              }
+              return ListView.separated(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: snapshot.data!.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            contentPadding: const EdgeInsets.all(0),
+                            content: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '${index + 1}번째 감사일기',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormField(
+                                    Expanded(
+                                      child: TextFormField(
+                                        onSaved: (String? val) {
+                                          content = val;
+                                        },
+                                        validator: (String? val) {
+                                          if (val == null || val.isEmpty) {
+                                            return '내용을 입력해주세요.';
+                                          }
+                                          return null;
+                                        },
+                                        maxLines: null,
+                                        minLines: null,
+                                        expands: true,
+                                        cursorColor: Colors.grey.shade400,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          filled: true,
+                                          fillColor: Colors.grey.shade300,
+                                          hintText: '감사한 내용을 입력해주세요.',
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    TextFormField(
                                       onSaved: (String? val) {
-                                        content = val;
+                                        tag = val;
                                       },
-                                      validator: (String? val) {
-                                        if (val == null || val.isEmpty) {
-                                          return '내용을 입력해주세요.';
-                                        }
-                                        return null;
-                                      },
-                                      maxLines: null,
-                                      minLines: null,
-                                      expands: true,
                                       cursorColor: Colors.grey.shade400,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         filled: true,
                                         fillColor: Colors.grey.shade300,
-                                        hintText: '감사한 내용을 입력해주세요.',
+                                        hintText: '감사한 대상을 입력해주세요.',
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  TextFormField(
-                                    onSaved: (String? val) {
-                                      tag = val;
-                                    },
-                                    cursorColor: Colors.grey.shade400,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      filled: true,
-                                      fillColor: Colors.grey.shade300,
-                                      hintText: '감사한 대상을 입력해주세요.',
+                                    const SizedBox(
+                                      height: 10,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  onSaveButton(context)
-                                ],
+                                    onSaveButton(context)
+                                  ],
+                                ),
                               ),
                             ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 70,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${index + 1}번째 감사일기'),
+                          const SizedBox(
+                            height: 10,
                           ),
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    height: 70,
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                          Row(
+                            children: [
+                              Text(
+                                snapshot.data![index].content,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(snapshot.data![index].tag)
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('${index + 1}번째 감사일기'),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        (snapshot.hasData || snapshot.data!.isEmpty)
-                            ? snapshot.data!.length < 5
-                                ? const Text('내용이 없습니다.')
-                                : Text(
-                                    snapshot.data![index].content,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                            : const Text('내용이 없습니다.')
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          }),
+                  );
+                },
+              );
+            }),
+      ),
     );
   }
 
