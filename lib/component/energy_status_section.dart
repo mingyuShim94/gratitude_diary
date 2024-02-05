@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gratitude_diary/database/drift_database.dart';
@@ -14,7 +16,7 @@ class EnergyStatusSection extends StatefulWidget {
 
 class _EnergyStatusSectionState extends State<EnergyStatusSection> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  DateTime date = DateTime.now();
   String? content;
   String? tag;
   @override
@@ -48,7 +50,7 @@ class _EnergyStatusSectionState extends State<EnergyStatusSection> {
                           child: Column(
                             children: [
                               const Text(
-                                '1번째 감사일기',
+                                '오늘의 감사노트',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -81,6 +83,7 @@ class _EnergyStatusSectionState extends State<EnergyStatusSection> {
                                 height: 20,
                               ),
                               TextFormField(
+                                maxLength: 5,
                                 onSaved: (String? val) {
                                   tag = val;
                                 },
@@ -104,11 +107,26 @@ class _EnergyStatusSectionState extends State<EnergyStatusSection> {
                   },
                 );
               },
-              child: const Icon(
-                Icons.favorite,
-                size: 300,
-                color: Colors.pink,
-              ),
+              child: StreamBuilder<List<Diary>>(
+                  stream:
+                      GetIt.I<LocalDatabase>().watchDiaryEntriesByDate(date),
+                  builder: (context, snapshot) {
+                    final double iconSize;
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.data!.isEmpty) {
+                      iconSize = 50;
+                    } else {
+                      iconSize = min(300, 50 + snapshot.data!.length * 50);
+                    }
+                    print('iconSize: $iconSize');
+                    return Icon(
+                      Icons.favorite,
+                      size: iconSize,
+                      color: Colors.pink,
+                    );
+                  }),
             ),
           ],
         ),

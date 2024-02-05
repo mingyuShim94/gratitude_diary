@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gratitude_diary/database/drift_database.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       // home: BottomNavBarExample(),
-      home: Home(),
+      home: BottomNavBarExample(),
     );
   }
 }
@@ -42,7 +43,6 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   static const List<Widget> _widgetOptions = <Widget>[
     // HomeScreen(),
     Home(),
-    History(),
     Report(),
     Setting(),
   ];
@@ -66,15 +66,11 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.description_outlined),
             label: 'Report',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.settings),
             label: 'Setting',
           ),
         ],

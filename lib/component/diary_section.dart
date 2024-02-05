@@ -27,13 +27,14 @@ class _DiarySectionState extends State<DiarySection> {
         child: StreamBuilder<List<Diary>>(
             stream: GetIt.I<LocalDatabase>().watchDiaryEntriesByDate(date),
             builder: (context, snapshot) {
-              print(snapshot.data);
+              // print(snapshot.data);
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasData && snapshot.data!.isEmpty) {
                 return const Center(child: Text('데이터가 없습니다.'));
               }
+
               return ListView.separated(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: snapshot.data!.length,
@@ -116,7 +117,7 @@ class _DiarySectionState extends State<DiarySection> {
                       );
                     },
                     child: Container(
-                      height: 70,
+                      height: 75,
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -130,13 +131,23 @@ class _DiarySectionState extends State<DiarySection> {
                             height: 10,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 snapshot.data![index].content,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text(snapshot.data![index].tag)
+                              snapshot.data![index].tag == ""
+                                  ? Container()
+                                  : Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.amber.shade400,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(snapshot.data![index].tag))
                             ],
                           )
                         ],
