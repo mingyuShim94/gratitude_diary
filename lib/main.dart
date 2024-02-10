@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gratitude_diary/database/drift_database.dart';
-import 'package:gratitude_diary/screens/history.dart';
 import 'package:gratitude_diary/screens/home.dart';
 import 'package:gratitude_diary/screens/report.dart';
 import 'package:gratitude_diary/screens/setting.dart';
